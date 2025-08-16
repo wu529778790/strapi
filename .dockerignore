@@ -2,9 +2,9 @@
 node_modules
 .pnpm-store
 
-# 构建输出
-dist
-build
+# 构建输出（在构建阶段需要这些文件）
+# dist
+# build
 .next
 .nuxt
 
@@ -83,5 +83,5 @@ docker-compose*
 .eslintrc*
 .prettierrc*
 .babelrc*
-tsconfig.json
+# tsconfig.json
 jest.config.*

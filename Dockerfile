@@ -42,7 +42,9 @@ RUN pnpm install --frozen-lockfile --prod && \
 
 # 从构建阶段复制构建产物
 COPY --from=builder --chown=strapi:nodejs /app/dist ./dist
+COPY --from=builder --chown=strapi:nodejs /app/.strapi ./.strapi
 COPY --from=builder --chown=strapi:nodejs /app/public ./public
+COPY --from=builder --chown=strapi:nodejs /app/config ./config
 COPY --from=builder --chown=strapi:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=strapi:nodejs /app/favicon.png ./favicon.png
 
