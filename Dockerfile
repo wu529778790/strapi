@@ -48,9 +48,12 @@ COPY --from=builder --chown=strapi:nodejs /app/dist/config ./config
 COPY --from=builder --chown=strapi:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=strapi:nodejs /app/favicon.png ./favicon.png
 
-# 创建上传目录并设置权限
+# 创建必要的目录并设置权限
 RUN mkdir -p /app/public/uploads && \
-    chown -R strapi:nodejs /app/public/uploads
+    mkdir -p /app/database/migrations && \
+    chown -R strapi:nodejs /app/public/uploads && \
+    chown -R strapi:nodejs /app/database && \
+    chown -R strapi:nodejs /app
 
 # 切换到非 root 用户
 USER strapi
