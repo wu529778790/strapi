@@ -105,8 +105,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Set deployment environment variables
+        id: deploy-env
+        run: |
+          echo "server_host=${{ secrets.SERVER_HOST }}" >> $GITHUB_OUTPUT
+          echo "server_username=${{ secrets.SERVER_USERNAME }}" >> $GITHUB_OUTPUT
+          echo "server_ssh_key=${{ secrets.SERVER_SSH_KEY }}" >> $GITHUB_OUTPUT
+          echo "server_port=${{ secrets.SERVER_PORT }}" >> $GITHUB_OUTPUT
+
       - name: Deploy to server
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || ${{ secrets.SERVER_HOST }} != ''
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && steps.deploy-env.outputs.server_host != '' && steps.deploy-env.outputs.server_username != '' && steps.deploy-env.outputs.server_ssh_key != ''
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
