@@ -5,15 +5,17 @@ ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml ./
 RUN npm install -g node-gyp
-RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install
+# 启用 corepack 并设置 pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm config set fetch-retry-maxtimeout 600000 -g && pnpm install
 ENV PATH=/opt/node_modules/.bin:$PATH
 
 WORKDIR /opt/app
 COPY . .
 RUN chown -R node:node /opt/app
 USER node
-RUN ["npm", "run", "build"]
+RUN ["pnpm", "run", "build"]
 EXPOSE 1337
-CMD ["npm", "run", "develop"]
+CMD ["pnpm", "run", "develop"]
