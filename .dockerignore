@@ -1,22 +1,87 @@
+# 依赖目录
 node_modules
-npm-debug.log
+.pnpm-store
+
+# 构建输出
+dist
+build
+.next
+.nuxt
+
+# 开发文件
 .git
 .gitignore
 README.md
 .env
-.nyc_output
-coverage
-.cache
-.parcel-cache
-.next
-.nuxt
-dist
-build
-.strapi-updater.json
-.strapi
-.DS_Store
-*.log
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.development
+.env.test
+.env.production
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 运行时数据
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 覆盖率目录
+coverage
+.nyc_output
+
+# 编辑器目录
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 测试文件
+test
+tests
+__tests__
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# 文档
+docs
+*.md
+
+# 临时文件
+tmp
+temp
+
+# Docker 相关
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+.circleci
+
+# 其他
+.eslintrc*
+.prettierrc*
+.babelrc*
+tsconfig.json
+jest.config.*
