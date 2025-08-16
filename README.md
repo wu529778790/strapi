@@ -1,12 +1,8 @@
-# strapi.shenzjd.com
+# strapi
 
 一个基于 Strapi 框架的项目,提供了一个快速搭建和部署 Strapi 应用程序的解决方案。该项目包含了项目的基本结构和配置文件,并提供了相关的部署脚本和 Docker 部署方案。
 
 > 官方不提供 docker 镜像, 所以自己构建镜像
-
-访问地址：<https://strapi.shenzjd.com>
-
-api 文档地址：<https://strapi.shenzjd.com/documentation>
 
 ## Docker 部署
 
@@ -14,12 +10,12 @@ api 文档地址：<https://strapi.shenzjd.com/documentation>
 
 ```bash
 # GHCR
-docker pull ghcr.io/wu529778790/strapi.shenzjd.com:latest
-docker run --name strapi -p 1337:1337 -d ghcr.io/wu529778790/strapi.shenzjd.com:latest
+docker pull ghcr.io/wu529778790/strapi:latest
+docker run --name strapi -p 1337:1337 -d ghcr.io/wu529778790/strapi:latest
 
 # Docker Hub
-docker pull docker.io/wu529778790/strapi.shenzjd.com:latest
-docker run --name strapi -p 1337:1337 -d docker.io/wu529778790/strapi.shenzjd.com:latest
+docker pull docker.io/wu529778790/strapi:latest
+docker run --name strapi -p 1337:1337 -d docker.io/wu529778790/strapi:latest
 ```
 
 ### 环境变量
