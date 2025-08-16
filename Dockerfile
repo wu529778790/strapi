@@ -16,7 +16,7 @@ RUN pnpm install --frozen-lockfile
 # 复制源代码
 COPY . .
 
-# 构建应用
+# 构建应用（这会编译 TypeScript 配置文件）
 RUN pnpm run build
 
 # 生产阶段
@@ -44,7 +44,7 @@ RUN pnpm install --frozen-lockfile --prod && \
 COPY --from=builder --chown=strapi:nodejs /app/dist ./dist
 COPY --from=builder --chown=strapi:nodejs /app/.strapi ./.strapi
 COPY --from=builder --chown=strapi:nodejs /app/public ./public
-COPY --from=builder --chown=strapi:nodejs /app/config ./config
+COPY --from=builder --chown=strapi:nodejs /app/dist/config ./config
 COPY --from=builder --chown=strapi:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=strapi:nodejs /app/favicon.png ./favicon.png
 
