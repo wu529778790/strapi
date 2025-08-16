@@ -8,12 +8,11 @@ ENV NODE_ENV=${NODE_ENV}
 RUN corepack enable
 RUN corepack prepare pnpm@latest --activate
 
-WORKDIR /opt/
+WORKDIR /opt/app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm config set fetch-retry-maxtimeout 600000 -g && pnpm install
-ENV PATH=/opt/node_modules/.bin:$PATH
+ENV PATH=/opt/app/node_modules/.bin:$PATH
 
-WORKDIR /opt/app
 COPY . .
 RUN chown -R node:node /opt/app
 USER node
