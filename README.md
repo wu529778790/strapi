@@ -2,7 +2,11 @@
 
 一个基于 Strapi 框架的项目,提供了一个快速搭建和部署 Strapi 应用程序的解决方案。该项目包含了项目的基本结构和配置文件,并提供了相关的部署脚本和 Docker 部署方案。
 
-> 官方不提供 docker 镜像
+> 官方不提供 docker 镜像, 所以自己构建镜像
+
+访问地址：<https://strapi.shenzjd.com>
+
+api 文档地址：<https://strapi.shenzjd.com/documentation>
 
 ## Docker 部署
 
