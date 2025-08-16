@@ -1,69 +1,20 @@
-# 构建阶段
-FROM node:18-alpine AS builder
+FROM node:22-alpine
+# Installing libvips-dev for sharp Compatibility
+RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev git
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
 
-# 设置工作目录
-WORKDIR /app
-
+WORKDIR /opt/app
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g node-gyp
 # 启用 corepack 并设置 pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN npm config set fetch-retry-maxtimeout 600000 -g && pnpm install
+ENV PATH=/opt/app/node_modules/.bin:$PATH
 
-# 复制 package.json 和 pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
-
-# 安装依赖
-RUN pnpm install --frozen-lockfile
-
-# 复制源代码
 COPY . .
-
-# 构建应用（这会编译 TypeScript 配置文件）
-RUN pnpm run build
-
-# 生产阶段
-FROM node:18-alpine AS production
-
-# 设置工作目录
-WORKDIR /app
-
-# 启用 corepack 并设置 pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# 创建非 root 用户
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S strapi -u 1001
-
-# 复制 package.json 和 pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
-
-# 只安装生产依赖并清理缓存
-RUN pnpm install --frozen-lockfile --prod && \
-    pnpm store prune && \
-    rm -rf /root/.pnpm-store
-
-# 从构建阶段复制构建产物
-COPY --from=builder --chown=strapi:nodejs /app/dist ./dist
-COPY --from=builder --chown=strapi:nodejs /app/.strapi ./.strapi
-COPY --from=builder --chown=strapi:nodejs /app/public ./public
-COPY --from=builder --chown=strapi:nodejs /app/dist/config ./config
-COPY --from=builder --chown=strapi:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=strapi:nodejs /app/favicon.png ./favicon.png
-
-# 创建必要的目录并设置权限
-RUN mkdir -p /app/public/uploads && \
-    mkdir -p /app/database/migrations && \
-    chown -R strapi:nodejs /app/public/uploads && \
-    chown -R strapi:nodejs /app/database && \
-    chown -R strapi:nodejs /app
-
-# 切换到非 root 用户
-USER strapi
-
-# 暴露端口
+RUN chown -R node:node /opt/app
+USER node
+RUN ["pnpm", "run", "build"]
 EXPOSE 1337
-
-# 设置环境变量
-ENV NODE_ENV=production
-ENV PORT=1337
-
-# 启动应用
-CMD ["pnpm", "start"]
+CMD ["pnpm", "run", "develop"]
