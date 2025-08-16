@@ -3,6 +3,7 @@ FROM node:22-alpine
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev git
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
+ENV ALLOWED_HOST=strapi.shenzjd.com
 
 # Enable Corepack for pnpm management
 RUN corepack enable
