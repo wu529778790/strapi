@@ -4,8 +4,8 @@ FROM node:18-alpine
 # 设置工作目录
 WORKDIR /app
 
-# 安装 pnpm
-RUN npm install -g pnpm
+# 启用 corepack 并设置 pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # 复制 package.json 和 pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
