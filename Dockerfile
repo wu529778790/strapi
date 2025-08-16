@@ -10,7 +10,6 @@ RUN corepack prepare pnpm@latest --activate
 
 WORKDIR /opt/
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install -g node-gyp
 RUN pnpm config set fetch-retry-maxtimeout 600000 -g && pnpm install
 ENV PATH=/opt/node_modules/.bin:$PATH
 
