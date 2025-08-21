@@ -1,5 +1,5 @@
 FROM node:22-alpine
-# Installing libvips-dev for sharp Compatibility
+# Installing libvips-dev for sharp Compatibility and sqlite
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev git sqlite
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
@@ -7,6 +7,7 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /opt/
 COPY package.json package-lock.json ./
 RUN npm install -g node-gyp
+RUN npm install better-sqlite3 --save
 RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install
 ENV PATH=/opt/node_modules/.bin:$PATH
 
