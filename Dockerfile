@@ -12,8 +12,8 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /opt/
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
-# Use npm ci for faster, more reliable builds in CI/CD environments
-RUN npm ci
+# Using npm install for better compatibility in some environments
+RUN npm install
 
 WORKDIR /opt/app
 # Copy the rest of the application source code
@@ -33,21 +33,20 @@ RUN apk add --no-cache vips sqlite
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /opt/
-
+# Copy built application from the builder stage
+COPY --from=builder /opt/app /opt/app
 # Copy production node_modules from the builder stage
-COPY --from=builder /opt/node_modules ./node_modules
+COPY --from=builder /opt/node_modules /opt/node_modules
 
+# Set the working directory
 WORKDIR /opt/app
 
-# Copy built application and configurations from the builder stage
-COPY --from=builder /opt/app .
-
-# Add node user and set permissions
-RUN addgroup -g 1001 -S node && \
-    adduser -u 1001 -S node -G node && \
-    chown -R node:node /opt/app && \
-    chown -R node:node /opt/node_modules
+# Add node user and set permissions, one step at a time for debugging.
+# This step can take a few minutes, please be patient.
+RUN addgroup -g 1001 -S node
+RUN adduser -u 1001 -S node -G node
+RUN chown -R node:node /opt/app
+RUN chown -R node:node /opt/node_modules
 
 # Switch to non-root user
 USER node
