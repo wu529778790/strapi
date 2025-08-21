@@ -42,8 +42,8 @@ COPY --from=builder /opt/node_modules /opt/node_modules
 WORKDIR /opt/app
 
 # Add node user and set permissions
-RUN addgroup -S node
-RUN adduser -S node -G node
+RUN if ! getent group node > /dev/null; then addgroup -S node; fi
+RUN if ! getent passwd node > /dev/null; then adduser -S node -G node; fi
 RUN chown -R node:node /opt/app
 RUN chown -R node:node /opt/node_modules
 
