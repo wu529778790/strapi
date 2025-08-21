@@ -33,6 +33,16 @@ docker run --name strapi -p 1337:1337 -d docker.io/wu529778790/strapi:latest
 | ADMIN_JWT_SECRET   | 用于管理后台 JWT 签名的密钥。                                 |
 | APP_KEYS           | 用于签名会话 cookie 的密钥。                                  |
 
+### 生成密钥
+
+```bash
+node -e "console.log(require('crypto').randomBytes(16).toString('base64'))"
+```
+
+您需要生成三个独立的密钥，并将它们以逗号分隔的形式设置在 `.env` 文件的 `APP_KEYS` 变量中，例如：
+
+`APP_KEYS=key1,key2,key3`
+
 ## 📚 Learn more
 
 - [docker](<https://docs.strapi.io/cms/installation/docker>)
