@@ -41,10 +41,9 @@ COPY --from=builder /opt/node_modules /opt/node_modules
 # Set the working directory
 WORKDIR /opt/app
 
-# Add node user and set permissions, one step at a time for debugging.
-# This step can take a few minutes, please be patient.
-RUN addgroup -g 1001 -S node
-RUN adduser -u 1001 -S node -G node
+# Add node user and set permissions
+RUN addgroup -S node
+RUN adduser -S node -G node
 RUN chown -R node:node /opt/app
 RUN chown -R node:node /opt/node_modules
 
