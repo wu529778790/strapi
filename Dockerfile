@@ -59,10 +59,11 @@ COPY --from=builder --chown=strapi:nodejs /opt/app/database ./database
 COPY --from=builder --chown=strapi:nodejs /opt/app/favicon.png ./favicon.png
 COPY --from=builder --chown=strapi:nodejs /opt/app/tsconfig.json ./tsconfig.json
 
-# Create database directory and set permissions
+# Create database directory and set permissions BEFORE switching user
 RUN mkdir -p /opt/app/data && \
     chown -R strapi:nodejs /opt/app/data && \
-    chmod 755 /opt/app/data
+    chmod 755 /opt/app/data && \
+    chown -R strapi:nodejs /opt/app
 
 # Switch to non-root user
 USER strapi
