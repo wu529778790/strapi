@@ -42,6 +42,10 @@ RUN apk add --no-cache \
     sqlite \
     dumb-init
 
+# Set environment variables for runtime
+ENV NODE_ENV=production
+ENV DATABASE_FILENAME=/opt/app/data/data.db
+
 # Create app user
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S strapi -u 1001
@@ -62,7 +66,7 @@ COPY --from=builder --chown=strapi:nodejs /opt/app/tsconfig.json ./tsconfig.json
 # Create database directory and set permissions BEFORE switching user
 RUN mkdir -p /opt/app/data && \
     chown -R strapi:nodejs /opt/app/data && \
-    chmod 755 /opt/app/data && \
+    chmod 777 /opt/app/data && \
     chown -R strapi:nodejs /opt/app
 
 # Switch to non-root user
