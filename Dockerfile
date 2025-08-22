@@ -24,16 +24,18 @@ RUN pnpm run build
 # Stage 2: Create the final, lean production image
 FROM node:22-alpine
 
-# Install only runtime dependencies
-RUN apk add --no-cache vips sqlite
+# Install pnpm and build dependencies for better-sqlite3
+RUN apk add --no-cache vips sqlite build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev sqlite-dev
+RUN npm install -g pnpm
 
 # Copy built application from the builder stage
 COPY --from=builder /opt/app /opt/app
-# Copy production node_modules from the builder stage
-COPY --from=builder /opt/app/node_modules /opt/app/node_modules
 
 # Set the working directory
 WORKDIR /opt/app
+
+# Rebuild better-sqlite3 for the target architecture
+RUN pnpm rebuild better-sqlite3
 
 # Add node user and set permissions
 RUN if ! getent group node > /dev/null; then addgroup -S node; fi
