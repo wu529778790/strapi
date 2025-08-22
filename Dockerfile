@@ -5,10 +5,6 @@ FROM node:22-alpine AS builder
 # Installing libvips-dev for sharp Compatibility and sqlite for building
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev sqlite-dev
 
-# Set build-time argument
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
 WORKDIR /opt/
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
@@ -28,34 +24,6 @@ FROM node:22-alpine
 
 # Install only runtime dependencies
 RUN apk add --no-cache vips sqlite
-
-# Set production environment
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-# Set JWT Secret (you should override this in production)
-ARG JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-ENV JWT_SECRET=${JWT_SECRET}
-
-# Set App Keys for encryption (you should override this in production)
-ARG APP_KEYS=your-app-keys-here
-ENV APP_KEYS=${APP_KEYS}
-
-# Set API Token Salt (you should override this in production)
-ARG API_TOKEN_SALT=your-api-token-salt-here
-ENV API_TOKEN_SALT=${API_TOKEN_SALT}
-
-# Set Admin JWT Secret (you should override this in production)
-ARG ADMIN_JWT_SECRET=your-admin-jwt-secret-here
-ENV ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
-
-# Set Transfer Token Salt (you should override this in production)
-ARG TRANSFER_TOKEN_SALT=your-transfer-token-salt-here
-ENV TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT}
-
-# Set Encryption Key (you should override this in production)
-ARG ENCRYPTION_KEY=your-encryption-key-here
-ENV ENCRYPTION_KEY=${ENCRYPTION_KEY}
 
 # Copy built application from the builder stage
 COPY --from=builder /opt/app /opt/app
