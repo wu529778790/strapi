@@ -50,12 +50,12 @@ docker run --name strapi -p 1337:1337 \
 
 ```bash
 # GHCR
-docker pull ghcr.io/wu529778790/strapi:latest
-docker run --name strapi -p 1337:1337 -d ghcr.io/wu529778790/strapi:latest
+docker pull ghcr.io/wu529778790/strapi.shenzjd.com:latest
+docker run --name strapi.shenzjd.com -p 1337:1337 -d ghcr.io/wu529778790/strapi.shenzjdcom:latest
 
 # Docker Hub
-docker pull docker.io/wu529778790/strapi:latest
-docker run --name strapi -p 1337:1337 -d docker.io/wu529778790/strapi:latest
+docker pull docker.io/wu529778790/strapi.shenzjd.com:latest
+docker run --name strapi.shenzjd.com -p 1337:1337 -d docker.io/wu529778790/strapi.shenzjd.com:latest
 ```
 
 ### 环境变量
