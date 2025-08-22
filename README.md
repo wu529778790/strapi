@@ -4,6 +4,46 @@
 
 > 官方不提供 docker 镜像, 所以自己构建镜像
 
+## 🚀 快速开始
+
+### 方法1：使用 Docker Compose（推荐）
+
+1. 生成安全密钥：
+
+```bash
+node generate-secrets.js
+```
+
+2. 创建 `.env` 文件并添加生成的密钥
+
+3. 启动服务：
+
+```bash
+docker-compose up -d
+```
+
+### 方法2：直接使用 Docker
+
+1. 构建镜像：
+
+```bash
+docker build -t strapi .
+```
+
+2. 运行容器（使用默认密钥）：
+
+```bash
+docker run --name strapi -p 1337:1337 -d strapi
+```
+
+3. 运行容器（使用自定义密钥）：
+
+```bash
+docker run --name strapi -p 1337:1337 \
+  -e JWT_SECRET=your-custom-jwt-secret \
+  -d strapi
+```
+
 ## Docker 部署
 
 ### 镜像拉取
@@ -32,16 +72,34 @@ docker run --name strapi -p 1337:1337 -d docker.io/wu529778790/strapi:latest
 | JWT_SECRET         | 用于 Users-Permissions 插件 JWT 签名的密钥。                  |
 | ADMIN_JWT_SECRET   | 用于管理后台 JWT 签名的密钥。                                 |
 | APP_KEYS           | 用于签名会话 cookie 的密钥。                                  |
+| ENCRYPTION_KEY     | 用于加密管理后台数据的密钥。                                  |
 
-### 生成密钥
+### 常见问题
 
-```bash
-node -e "console.log(require('crypto').randomBytes(16).toString('base64'))"
+#### JWT_SECRET 缺失错误
+
+如果遇到以下错误：
+
+```
+Missing jwtSecret. Please, set configuration variable "jwtSecret" for the users-permissions plugin
 ```
 
-您需要生成三个独立的密钥，并将它们以逗号分隔的形式设置在 `.env` 文件的 `APP_KEYS` 变量中，例如：
+解决方案：
 
-`APP_KEYS=key1,key2,key3`
+1. 使用 `node generate-secrets.js` 生成安全密钥
+2. 在运行 Docker 容器时设置环境变量：
+
+   ```bash
+   docker run --name strapi -p 1337:1337 \
+     -e JWT_SECRET=your-generated-jwt-secret \
+     -d strapi
+   ```
+
+3. 或者使用 docker-compose：
+
+   ```bash
+   docker-compose up -d
+   ```
 
 ## 📚 Learn more
 

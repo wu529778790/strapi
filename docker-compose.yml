@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  strapi:
+    build:
+      context: .
+      args:
+        JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-this-in-production}
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-this-in-production}
+      - APP_KEYS=${APP_KEYS:-your-app-keys-here}
+      - API_TOKEN_SALT=${API_TOKEN_SALT:-your-api-token-salt-here}
+      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET:-your-admin-jwt-secret-here}
+      - TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT:-your-transfer-token-salt-here}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-your-encryption-key-here}
+      - DATABASE_CLIENT=${DATABASE_CLIENT:-sqlite}
+      - DATABASE_FILENAME=${DATABASE_FILENAME:-.tmp/data.db}
+      - HOST=0.0.0.0
+      - PORT=1337
+    volumes:
+      - ./public/uploads:/opt/app/public/uploads
+      - ./.tmp:/opt/app/.tmp
+    restart: unless-stopped
