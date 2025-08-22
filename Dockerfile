@@ -18,6 +18,7 @@ RUN apk update && apk add --no-cache \
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
+ENV DATABASE_FILENAME=/opt/app/data/data.db
 
 WORKDIR /opt/app
 COPY package.json package-lock.json ./
@@ -57,6 +58,11 @@ COPY --from=builder --chown=strapi:nodejs /opt/app/src ./src
 COPY --from=builder --chown=strapi:nodejs /opt/app/database ./database
 COPY --from=builder --chown=strapi:nodejs /opt/app/favicon.png ./favicon.png
 COPY --from=builder --chown=strapi:nodejs /opt/app/tsconfig.json ./tsconfig.json
+
+# Create database directory and set permissions
+RUN mkdir -p /opt/app/data && \
+    chown -R strapi:nodejs /opt/app/data && \
+    chmod 755 /opt/app/data
 
 # Switch to non-root user
 USER strapi
