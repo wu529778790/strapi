@@ -5,18 +5,21 @@ FROM node:22-alpine AS builder
 # Installing libvips-dev for sharp Compatibility and sqlite for building
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev sqlite-dev
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 WORKDIR /opt/
 # Copy package files and install dependencies
-COPY package.json package-lock.json ./
-# Using npm install for better compatibility in some environments
-RUN npm install
+COPY package.json pnpm-lock.yaml ./
+# Using pnpm install for better performance and compatibility
+RUN pnpm install --frozen-lockfile
 
 WORKDIR /opt/app
 # Copy the rest of the application source code
 COPY . .
 
 # Build the Strapi admin panel
-RUN npm run build
+RUN pnpm run build
 
 # --- RUNNER ---
 # Stage 2: Create the final, lean production image
@@ -46,4 +49,4 @@ USER node
 EXPOSE 1337
 
 # Start the application in production mode
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "develop"]
