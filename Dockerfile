@@ -8,13 +8,12 @@ RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev l
 # Install pnpm globally
 RUN npm install -g pnpm
 
-WORKDIR /opt/
+WORKDIR /opt/app
 # Copy package files and install dependencies
 COPY package.json pnpm-lock.yaml ./
 # Using pnpm install for better performance and compatibility
 RUN pnpm install --frozen-lockfile
 
-WORKDIR /opt/app
 # Copy the rest of the application source code
 COPY . .
 
@@ -31,7 +30,7 @@ RUN apk add --no-cache vips sqlite
 # Copy built application from the builder stage
 COPY --from=builder /opt/app /opt/app
 # Copy production node_modules from the builder stage
-COPY --from=builder /opt/node_modules /opt/node_modules
+COPY --from=builder /opt/app/node_modules /opt/app/node_modules
 
 # Set the working directory
 WORKDIR /opt/app
@@ -40,7 +39,6 @@ WORKDIR /opt/app
 RUN if ! getent group node > /dev/null; then addgroup -S node; fi
 RUN if ! getent passwd node > /dev/null; then adduser -S node -G node; fi
 RUN chown -R node:node /opt/app
-RUN chown -R node:node /opt/node_modules
 
 # Switch to non-root user
 USER node
